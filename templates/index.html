@@ -1,0 +1,39 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Flask Lan Chat App Login Form</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}">
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-area">
+<div class="hero-text">
+    <h1> Welcome to the flask-based LAN chat App!</h1>
+</div>
+        <h2> Please log in to access this service!</h2>
+</div>
+
+</section>
+
+<section>
+    {% with messages =  get_flashed_messages ()%}
+    {%if messages %}
+    {%for message in messages %}
+    <p>{{message}}</p>
+            {%endfor%}
+        {%endif%}
+    {%endwith%}
+</section>
+
+<form action="/chat-page" method="POST">
+<div class="form-group">
+    <label> Enter a Username to log into the chat app:</label>
+    <input class="input is-link" type="text" placeholder="username" name="user_name">
+  </div>
+    <button class="button-color" type="submit"> Login!</button>
+</form>
+
+</body>
+</html>

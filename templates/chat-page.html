@@ -1,0 +1,31 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> Flask Lan Chat App</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles.css')}}">
+</head>
+<body>
+
+<section class="hero">
+    <div class="hero-area">
+<div class="hero-text">
+    <h1> Hello {{Uname}}! </h1>
+
+</div>
+    </div>
+</section>
+
+<form action="/chat-page" method="POST">
+<div class="form-group">
+    <label> Your message</label>
+    <input class="input is-link" type="text" placeholder="message" name="mssg">
+  </div>
+    <button class="button-color" type="submit"> Send!</button>
+</form>
+<a href="/logout">
+    <button class="button-color"> Logout!</button>
+</a>
+
+</body>
+</html>

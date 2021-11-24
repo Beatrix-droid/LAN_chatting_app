@@ -1,0 +1,14 @@
+.section{
+    background-color: #f0f0f6;
+    border: solid black 1px;
+    font-family: 'Nanum Gothic', sans-serif;
+    }
+
+
+.hero {
+    background-color:#1c1d25;
+    height: 100 vh;
+    color: white;
+    font-size: 40px;
+    }
+
