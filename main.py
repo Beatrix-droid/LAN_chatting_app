@@ -14,7 +14,6 @@ def login_form():
 def chat_page():
 	username = request.form.get("user_name")
 	session["user"] = username
-	#flash(f'Hello {username}You were successfully logged in')
 	return render_template('chat-page.html', Uname=username)
 
 

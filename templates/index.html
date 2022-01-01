@@ -21,7 +21,7 @@
     {% with messages =  get_flashed_messages ()%}
     {%if messages %}
     {%for message in messages %}
-    <p>{{message}}</p>
+    <p class="flash">{{message}}</p>
             {%endfor%}
         {%endif%}
     {%endwith%}
@@ -32,7 +32,7 @@
     <label> Enter a Username to log into the chat app:</label>
     <input class="input is-link" type="text" placeholder="username" name="user_name">
   </div>
-    <button class="button-color" type="submit"> Login!</button>
+    <button class="login_button" type="submit"> Login!</button>
 </form>
 
 </body>
