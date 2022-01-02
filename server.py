@@ -7,7 +7,7 @@ PORT = 55008
 
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind(HOST, PORT)
+s.bind((HOST, PORT))
 
 # Making the port a reusable port:
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -17,8 +17,6 @@ client_sockets = []
 nicknames = []
 # Server listening for incoming connections
 s.listen()
-
-print(f"listening as {HOST}: {PORT}")
 
 # function that sends a message to all clients connected on the server:
 
@@ -55,7 +53,6 @@ def accept_clients(client):
 			break
 
 
-
 def receive():
 	while True:
 		# we will see the client and its Ip address when it connects to the server
@@ -79,5 +76,7 @@ def receive():
 		thread.daemon = True
 		thread.start()
 
+
 print("server is listening")
+
 receive()
