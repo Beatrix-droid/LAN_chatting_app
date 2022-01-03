@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, flash, session
+from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.static_folder = "static"
 app.secret_key = "My_secret_key"
+socketio = SocketIO(app)
 
 
 @app.route('/')
@@ -25,4 +27,4 @@ def logout():
 
 
 if __name__ == "__main__":
-	app.run()
+	socketio.run(app)
