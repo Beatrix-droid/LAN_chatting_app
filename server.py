@@ -77,6 +77,6 @@ def receive():
 		thread.start()
 
 
-print("server is listening")
+print("server is listening...")
 
 receive()
