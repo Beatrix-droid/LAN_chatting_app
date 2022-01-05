@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, flash, session
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
 app.static_folder = "static"
@@ -25,6 +25,29 @@ def logout():
 	flash("You have been logged out!")
 	return render_template("index.html")
 
+# decorator to define a default error handler for SocketIO events
+@socketio.on_error_default
+def error_handler(e):
+	print("An Error has occurred:" + str(e))
+
+# uses string messages, function to recieve messages
+@socketio.on("message")
+def handle_message(data):
+	print("Recieved message" + data)
+
+# function to send messages to the entire group
+@socketio.on("message")
+def handle_message(message):
+	send(message, broadcast=True)
+
+# displayign when a client has connected and disconnected
+@socketio.on('connect')
+def test_connect():
+    emit('my response', {'data': 'Connected'})
+
+@socketio.on('disconnect')
+def test_disconnect():
+    print('Client disconnected')
 
 if __name__ == "__main__":
 	socketio.run(app)
