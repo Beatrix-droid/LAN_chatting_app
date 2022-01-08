@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, session
+from flask import Flask, render_template, request, flash, session, redirect
 from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
@@ -23,7 +23,7 @@ def chat_page():
 def logout():
 	session.pop("user", None)
 	flash("You have been logged out!")
-	return render_template("index.html")
+	return redirect("/")
 
 
 # decorator to define a default error handler for SocketIO events
