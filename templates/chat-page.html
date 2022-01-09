@@ -18,20 +18,17 @@
     </div>
 </section>
 
+<div class="d-inline-flex p-2">
 <form action="/chat-page" method="POST">
     <div class="input-group">
   <span class="input-group-text">What say you?</span>
   <textarea class="form-control" aria-label="With textarea"></textarea>
 </div>
+    <div class="d-inline-flex p-2">
     <button type="submit" class="btn btn-success">Say it!</button>
+    </div>
 </form>
-
-
-
-
-
-
-
+</div>
 
 
 <a href="/logout">
@@ -39,6 +36,19 @@
 </a>
 
 </body>
+<footer class="bg-light text-center text-lg-start">
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.5);">
+    © 2022 Copyright:
+    <a class="text-dark" href="https://beatrix-droid.github.io/">Beatrice Federici</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+
+
+
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 <script type=text/javascript">
     $(document).ready(function() {
