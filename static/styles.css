@@ -17,10 +17,12 @@
        color: red;
        }
 
-   body{
-        background-color: #DBF9FC;
+   .background{
+        background-color: rgba(0, 0, 12, 1);
+        background-image: linear-gradient(rgba(33, 114, 103, 0.8), rgba(0, 0, 12, 1);
    }
 
-  .bg-image{
-    height: 25vh;
+    .center_it{
+       width: 50%;
+       margin: 0 auto;
     }
