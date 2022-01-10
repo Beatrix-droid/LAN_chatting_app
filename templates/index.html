@@ -31,16 +31,21 @@
 
 <body class="background">
 <div class="d-inline-flex p-2">
+    <div class="flash-container">
 <section>
     {% with messages =  get_flashed_messages ()%}
     {%if messages %}
     {%for message in messages %}
-    <p class="flash">{{message}}</p>
+    <h6 class="flash">{{message}}</h6>
             {%endfor%}
         {%endif%}
     {%endwith%}
 </section>
 </div>
+</div>
+
+<div class="container" style="align-items: center;">
+  <!-- Content here -->
 
 
         <form action="/chat-page" method="POST">
@@ -53,6 +58,7 @@
 
     <button type="submit" class="btn btn-primary">Login!</button>
 </form>
+</div>
 <!---
 <div class="bg-image-container">
  <img class="bg-image" src="https://logo.clearbit.com/socket.io" alt="socketio_logo">

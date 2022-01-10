@@ -13,8 +13,18 @@
        color: white;
        font-size: 40px;
        }
+
+
+    .flash-container {
+        margin: auto;
+        padding: 10px;
+        }
+
+
     .flash{
        color: red;
+       padding: 10px;
+       text-align: center;
        }
 
    .background{
@@ -22,7 +32,4 @@
         background-image: linear-gradient(rgba(33, 114, 103, 0.8), rgba(0, 0, 12, 1);
    }
 
-    .center_it{
-       width: 50%;
-       margin: 0 auto;
-    }
+
