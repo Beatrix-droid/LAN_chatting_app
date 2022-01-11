@@ -30,8 +30,8 @@
 
 
 <body class="background">
-<div class="d-inline-flex p-2">
-    <div class="flash-container">
+
+     <div class="horizontal_container">
 <section>
     {% with messages =  get_flashed_messages ()%}
     {%if messages %}
@@ -42,7 +42,6 @@
     {%endwith%}
 </section>
 </div>
-</div>
 
 <div class="container" style="align-items: center;">
   <!-- Content here -->
@@ -52,7 +51,7 @@
 <div class="d-inline-flex p-2">
  <div class="input-group flex-nowrap">
   <span class="input-group-text" id="addon-wrapping">@</span>
-  <input type="text" class="form-control" placeholder=" Enter a Username" name="user_name" aria-label="Username" aria-describedby="addon-wrapping">
+  <input type="text" class="form-control" placeholder=" Enter a Username" name="user_name" aria-label="Username" aria-describedby="addon-wrapping" required>
   </div>
     </div>
 
