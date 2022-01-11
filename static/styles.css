@@ -15,10 +15,16 @@
        }
 
 
-    .flash-container {
-        margin: auto;
-        padding: 10px;
+   
+    .horizontal_container {
+        margin: 25px;
+        width: 350px;
+        height: 200px;
+        /* Center child horizontally*/
+        display: flex;
+        justify-content: center
         }
+
 
 
     .flash{
