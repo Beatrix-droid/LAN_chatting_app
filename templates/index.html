@@ -30,42 +30,39 @@
 
 
 <body class="background">
-
-     <div class="horizontal_container">
-<section>
-    {% with messages =  get_flashed_messages ()%}
-    {%if messages %}
-    {%for message in messages %}
-    <h6 class="flash">{{message}}</h6>
-            {%endfor%}
-        {%endif%}
-    {%endwith%}
-</section>
-</div>
-
-<div class="container" style="align-items: center;">
-  <!-- Content here -->
-
-
-        <form action="/chat-page" method="POST">
-<div class="d-inline-flex p-2">
- <div class="input-group flex-nowrap">
-  <span class="input-group-text" id="addon-wrapping">@</span>
-  <input type="text" class="form-control" placeholder=" Enter a Username" name="user_name" aria-label="Username" aria-describedby="addon-wrapping" required>
-  </div>
+<!--horizontal container: a container to align items to the center -->
+    <div class="horizontal_container">
+        <section>
+            {% with messages =  get_flashed_messages ()%}
+            {%if messages %}
+            {%for message in messages %}
+            <h6 class="flash">{{message}}</h6>
+                    {%endfor%}
+                {%endif%}
+            {%endwith%}
+        </section>
     </div>
 
-    <button type="submit" class="btn btn-primary">Login!</button>
-</form>
-</div>
+
+    <div class="horizontal_container">
+        <form action="/chat-page" class="custom-centered" method="POST">
+            <!-- styling the form -->
+            <div class="d-inline-flex p-2">
+                 <div class="input-group flex-nowrap">
+                    <span class="input-group-text" id="addon-wrapping">@</span>
+                        <input type="text" class="form-control" placeholder=" Enter a Username" name="user_name" aria-label="Username" aria-describedby="addon-wrapping" required>
+                 </div>
+            </div>
+            <!-- end of styling the form -->
+            <button type="submit" class="btn btn-primary">Login!</button>
+        </form>
+    </div>
 <!---
 <div class="bg-image-container">
  <img class="bg-image" src="https://logo.clearbit.com/socket.io" alt="socketio_logo">
 </div>
 --->
 </body>
-
-
 
 <footer class="bg-light text-center text-lg-start" style="position: absolute; bottom: 0; width: 100%;">
   <!-- Copyright -->
@@ -75,7 +72,4 @@
   </div>
   <!-- Copyright -->
 </footer>
-
-
-
 </html>

@@ -1,5 +1,4 @@
 
-
     .section{
        background-color: #f0f0f6;
        border: solid black 1px;
@@ -14,18 +13,11 @@
        font-size: 40px;
        }
 
-
-   
     .horizontal_container {
-        margin: 25px;
-        width: 350px;
-        height: 200px;
         /* Center child horizontally*/
         display: flex;
-        justify-content: center
+        justify-content: center;
         }
-
-
 
     .flash{
        color: red;
@@ -34,8 +26,13 @@
        }
 
    .background{
-        background-color: rgba(0, 0, 12, 1);
-        background-image: linear-gradient(rgba(33, 114, 103, 0.8), rgba(0, 0, 12, 1);
-   }
+        background: #4EFECD;
+        background: -webkit-radial-gradient(center, #4EFECD, #000000);
+        background: -moz-radial-gradient(center, #4EFECD, #000000);
+        background: radial-gradient(ellipse at center, #4EFECD, #000000);
 
+    .custom-centered{
+        margin:0 auto;
+        width:300px;
+        }
 
