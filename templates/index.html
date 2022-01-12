@@ -31,7 +31,7 @@
 
 <body class="background">
 <!--horizontal container: a container to align items to the center -->
-    <div class="horizontal_container">
+    <div class="alignment_container">
         <section>
             {% with messages =  get_flashed_messages ()%}
             {%if messages %}
@@ -44,7 +44,7 @@
     </div>
 
 
-    <div class="horizontal_container">
+    <div class="alignment_container">
         <form action="/chat-page" class="custom-centered" method="POST">
             <!-- styling the form -->
             <div class="d-inline-flex p-2">

@@ -13,11 +13,21 @@
        font-size: 40px;
        }
 
-    .horizontal_container {
+    .alignment_container {
         /* Center child horizontally*/
         display: flex;
         justify-content: center;
+        align-items: center;
+         height:15vh;
         }
+
+      .chat_page_container {
+        /* Center child horizontally*/
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        }
+
 
     .flash{
        color: red;
@@ -35,4 +45,6 @@
         margin:0 auto;
         width:300px;
         }
+
+
 

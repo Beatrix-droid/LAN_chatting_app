@@ -21,29 +21,30 @@
 
 
     <!-- styling the form and buttons -->
-    <div class="horizontal_container">
+   <div class="chat_page_container">
         <div class="d-inline-flex p-2">
             <form action="/chat-page" method="POST">
                 <div class="input-group">
                     <span class="input-group-text">What say you?</span>
                         <textarea class="form-control" aria-label="With textarea"></textarea>
                 </div>
-                <div class="horizontal_container">
+               <div class="chat_page_container">
                     <div class="d-inline-flex p-2">
                     <button type="submit" class="btn btn-success">Say it!</button>
                 </div>
                 </div>
+                 <div class="chat_page_container">
+                      <a href="/logout">
+                        <button type="button" class="btn btn-danger">Logout!</button>
+                      </a>
+                  </div>
+
             </form>
         </div>
     </div>
         <!-- end of styling the form and buttons -->
 
 
-    <div class="horizontal_container">
-        <a href="/logout">
-            <button type="button" class="btn btn-danger">Logout!</button>
-        </a>
-    </div>
 
 </body>
     <footer class="bg-light text-center text-lg-start" style="position: absolute; bottom: 0; width: 100%;">
