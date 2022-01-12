@@ -13,6 +13,11 @@
        font-size: 40px;
        }
 
+     .hero-container{
+        display: flex;
+        justify-content: center;
+        }
+
     .alignment_container {
         /* Center child horizontally*/
         display: flex;
@@ -30,7 +35,7 @@
 
 
     .flash{
-       color: red;
+       color: white;
        padding: 10px;
        text-align: center;
        }
