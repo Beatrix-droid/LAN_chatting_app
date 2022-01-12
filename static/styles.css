@@ -5,34 +5,40 @@
        font-family: 'Nanum Gothic', sans-serif;
        }
 
-
     .hero {
        background-color:#1c1d25;
-       height: 100 vh;
+       height: 40 vh;
        color: white;
        font-size: 40px;
+       margin-bottom: 10%;
+       padding:10px;
        }
 
-     .hero-container{
-        display: flex;
-        justify-content: center;
-        }
+    .hero-container{
+       display: flex;
+       justify-content: center;
+       }
 
     .alignment_container {
-        /* Center child horizontally*/
-        display: flex;
-        justify-content: center;
-        align-items: center;
-         height:15vh;
-        }
+       /* Center child horizontally*/
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       height:15vh;
+       }
 
-      .chat_page_container {
-        /* Center child horizontally*/
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        }
+    .chat_page_container {
+       /* Center child horizontally*/
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       }
 
+    .message_container{
+    /* Center child horizontally*/
+       display: flex;
+       justify-content: center;
+       }
 
     .flash{
        color: white;
@@ -40,16 +46,25 @@
        text-align: center;
        }
 
+    .ul{
+       color: white;
+       }
+
    .background{
-        background: #4EFECD;
-        background: -webkit-radial-gradient(center, #4EFECD, #000000);
-        background: -moz-radial-gradient(center, #4EFECD, #000000);
-        background: radial-gradient(ellipse at center, #4EFECD, #000000);
+       background: #4EFECD;
+       background: -webkit-radial-gradient(center, #4EFECD, #000000);
+       background: -moz-radial-gradient(center, #4EFECD, #000000);
+       background: radial-gradient(ellipse at center, #4EFECD, #000000);
 
-    .custom-centered{
-        margin:0 auto;
-        width:300px;
-        }
+   .custom-centered{
+       margin:0 auto;
+       width:300px;
+       }
 
+
+    .vertical_space{
+        margin-bottom: 500px;
+        margin-top: 100px;
+    }
 
 

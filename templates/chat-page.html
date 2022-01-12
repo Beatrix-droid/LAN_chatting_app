@@ -24,13 +24,32 @@
 
 
 
+    <div class="message_container">
+            <div class="d-inline-flex p-2">
+                <div class="card" style="width: 30rem;">
+                    <div class="card-body">
+                        <ul id="messages">
+                            <li>Hello World!</li>
+                            <li>Hello World!</li>
+                            <li>Hello World!</li>
+                            <li>Hello World!</li>
+                            <li>Hello World!</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+
     <!-- styling the form and buttons -->
    <div class="chat_page_container">
         <div class="d-inline-flex p-2">
             <form action="/chat-page" method="POST">
                 <div class="input-group">
                     <span class="input-group-text">What say you?</span>
-                        <textarea class="form-control" aria-label="With textarea"></textarea>
+                        <textarea id="MyMessage" class="form-control" aria-label="With textarea"></textarea>
                 </div>
                <div class="chat_page_container">
                     <div class="d-inline-flex p-2">
@@ -39,7 +58,7 @@
                 </div>
                  <div class="chat_page_container">
                       <a href="/logout">
-                        <button type="button" class="btn btn-danger">Logout!</button>
+                        <button id="SendButton" type="button" class="btn btn-danger">Logout!</button>
                       </a>
                   </div>
             </form>
@@ -63,15 +82,21 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
     <script type=text/javascript">
-    $(document).ready(function() {
-        var = socket = io.connect("http:// 127.0.0.1:5000");
-        socket.on("connect", function() {})
-        socket.send("User has connected!");
-    });
-     var form = $('form').on("submit", function(e){
-        e.preventDefault()
-        let user_name = Uname
-        let user_input = $(input."input-is-link").val()
+       socket.on("connect", function(){
+        socket.send("User has connected");
+        });
+
+      socket.on("message", function(msg) {
+        $("#messages").append("<li>" + msg + "</li>");
+        });
+
+       //sending a message and clearing the input box once the message has been sent
+       $("#SendButton").on("click", function() {
+          socket.send($("#MyMessage").val());
+          $("#MyMessage").val("");
+       });
+     });
+
 
     </script>
 </html>

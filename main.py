@@ -4,6 +4,7 @@ from flask_socketio import SocketIO, send, emit
 app = Flask(__name__)
 app.static_folder = "static"
 app.secret_key = "My_secret_key"
+app.config["SECRET KEY"] = "another_secret!"
 socketio = SocketIO(app)
 
 
@@ -26,29 +27,12 @@ def logout():
 	return redirect("/")
 
 
-# decorator to define a default error handler for SocketIO events
-@socketio.on_error_default
-def error_handler(e):
-	print("An Error has occurred:" + str(e))
-
 
 # function to send messages to the entire group
 @socketio.on("message")
-def handle_message(message):
-	send(message, broadcast=True)
-
-
-# displayign when a client has connected and disconnected
-@socketio.on('connect')
-def test_connect():
-	emit('my response', {'data': 'Connected'})
-
-
-@socketio.on('disconnect')
-def test_disconnect():
-	print('Client disconnected')
-
-
+def handle_message(msg):
+	print("message: " + msg)
+	send(msg, broadcast=True)
 
 
 
