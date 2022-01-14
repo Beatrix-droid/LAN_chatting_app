@@ -46,22 +46,20 @@
     <!-- styling the form and buttons -->
    <div class="chat_page_container">
         <div class="d-inline-flex p-2">
-            <form action="/chat-page" method="POST">
                 <div class="input-group">
                     <span class="input-group-text">What say you?</span>
                         <textarea id="MyMessage" class="form-control" aria-label="With textarea"></textarea>
                 </div>
                <div class="chat_page_container">
                     <div class="d-inline-flex p-2">
-                    <button type="submit" class="btn btn-primary">Say it!</button>
+                    <button type="button" id="SendButton"class="btn btn-primary">Say it!</button>
                 </div>
                 </div>
                  <div class="chat_page_container">
                       <a href="/logout">
-                        <button id="SendButton" type="button" class="btn btn-warning">Logout!</button>
+                        <button type="button" class="btn btn-warning">Logout!</button>
                       </a>
-                  </div>
-            </form>
+                </div>
         </div>
     </div>
         <!-- end of styling the form and buttons -->
