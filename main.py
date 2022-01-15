@@ -21,8 +21,8 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 #creating the database model containing username
 class users(db.Model):
-    _id =  db.column("id",db.Integer, primary_key=True)
-    user_name = db.column("username", db.String())
+    _id =  db.Column("id", db.Integer, primary_key=True)
+    user_name = db.Column("username", db.String(100))
 
     #id is automatically created as it is the primary key
     def __init__(self, user_name):
