@@ -1,27 +1,66 @@
+
 from flask import Flask, render_template, request, flash, session, redirect
 from flask_session import Session
 from flask_socketio import SocketIO, send, emit
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+Session(app)
+socketio = SocketIO(app)
+db = SQLAlchemy(app)
+
+                #name of table we will be referencing
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
 app.static_folder = "static"
 app.secret_key = "My_secret_key"
 app.config["SECRET KEY"] = "another_secret!"
 app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-socketio = SocketIO(app)
 
 
+
+
+#creating the database model containing username
+class users(db.Model):
+    _id =  db.column("id",db.Integer, primary_key=True)
+    user_name = db.column("username", db.String())
+
+    #id is automatically created as it is the primary key
+    def __init__(self, user_name):
+        self.user_name = user_name
+
+
+#creating the routes
 @app.route('/')
 def login_form():
 	return render_template('index.html')
 
 
-@app.route('/chat-page', methods=["POST"])
+@app.route('/chat-page', methods=["POST", "GET"])
 def chat_page():
-    username = request.form.get("user_name")
-    session["user"] = username
-    return render_template('chat-page.html', Uname=username)
+    if request.method == "POST":
+        username = request.form.get("user_name")
+        session["user"] = username
+        return render_template('chat-page.html', Uname=username)
+    else:
+        if "user" in session:
+            username = session["user"]
 
+             #checking if the user is in the database. There will only be one user with
+            #that name so hence why we are only interested in grabbing the first entry of the db
+            found_user = users.query.filter_by().first()
+
+            if found_user:
+                session["user"] = found_user.user_name
+            else:
+                #adding the user to the database
+                usr = users(username, "")
+                db.session.add(usr)
+                db.commit()
+
+
+        else:
+            flash("You are not logged in!")
+            return render_template("index.html")
 
 @app.route("/logout")
 def logout():
@@ -29,6 +68,8 @@ def logout():
 	flash("You have been logged out!")
 	return redirect("/")
 
+
+#defining the socket functions
 
 # function to send messages to the entire group
 @socketio.on("message")
@@ -38,4 +79,6 @@ def handle_message(msg):
 
 
 if __name__ == "__main__":
-	socketio.run(app)
+    #this will create the database if it doesn't already exist when we the run the program
+    db.create_all()
+    socketio.run(app)
