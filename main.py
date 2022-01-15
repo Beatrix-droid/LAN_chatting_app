@@ -17,10 +17,8 @@ app.config["SECRET KEY"] = "another_secret!"
 app.config["SESSION_TYPE"] = "filesystem"
 
 
-
-
 #creating the database model containing username
-class users(db.Model):
+class Users(db.Model):
     _id =  db.Column("id", db.Integer, primary_key=True)
     user_name = db.Column("username", db.String(100))
 
@@ -47,15 +45,15 @@ def chat_page():
 
              #checking if the user is in the database. There will only be one user with
             #that name so hence why we are only interested in grabbing the first entry of the db
-            found_user = users.query.filter_by().first()
+            found_user = Users.query.filter_by(user_name=username).first()
 
             if found_user:
                 session["user"] = found_user.user_name
             else:
                 #adding the user to the database
-                usr = users(username, "")
+                usr = Users(username, "")
                 db.session.add(usr)
-                db.commit()
+                db.sessioncommit()
 
 
         else:
