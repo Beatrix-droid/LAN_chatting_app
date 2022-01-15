@@ -13,7 +13,7 @@
       <div class="hero-container">
         <div class="hero-area">
           <div class="hero-text">
-            <h1>Hello {{Uname}}!</h1>
+            <h1 class="usernm">Hello {{Uname}}!</h1>
           </div>
         </div>
       </div>
@@ -63,31 +63,15 @@
     </footer>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <!-- importing jquery to handle the "on click event for the send button " and socketio scripts to implement client side of the messaging app -->
      <script src="//code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-      <!-- script where the code handling the messages will be stored -->
+
+    <!-- script where the code handling the messages will be stored -->
     <script type="text/javascript">
       // instantiate a socket object and connect it to the server (in this case the local host)
+
+
       $(document).ready(function() {
         var socket = io.connect("http://127.0.0.1:5000");
 
@@ -99,6 +83,8 @@
         socket.send("User has connected");
         });
 
+
+
       socket.on("message", function(msg) {
         $("#messages").append("<li>" + msg + "</li>");
         });
@@ -109,7 +95,4 @@
           $("#MyMessage").val("");
        });
      });
-
-
-
-    </script>
+  </script>
