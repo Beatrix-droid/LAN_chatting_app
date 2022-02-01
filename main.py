@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template, request, flash, session, redirect
+from flask import Flask, render_template, request, flash, session, redirect, url_for
 from flask_session import Session
 from flask_socketio import SocketIO, send, emit
 from flask_sqlalchemy import SQLAlchemy
@@ -27,44 +27,42 @@ class Users(db.Model):
         self.user_name = user_name
 
 
+
+
+
+
 #creating the routes
-@app.route('/')
+@app.route('/login', methods=["POST", "GET"])
 def login_form():
-	return render_template('index.html')
+
+    if request.method == "POST":
+        username = request.form.get("user_name")
+        session["user"] = username
+        return redirect(url_for('chat_page'))
+    else:
+        if "user" in session:
+            username = session["user"]
+            flash("already logged in")
+            return redirect(url_for('chat_page'))
+
+        return render_template('login.html')
+
 
 
 @app.route('/chat-page', methods=["POST", "GET"])
 def chat_page():
-    if request.method == "POST":
-        username = request.form.get("user_name")
-        session["user"] = username
-        return render_template('chat-page.html', Uname=username)
-    else:
-        if "user" in session:
+       if "user" in session:
             username = session["user"]
+            return render_template('chat-page.html', Uname=username)
+       else:
+           return redirect(url_for('login_form'))
 
-             #checking if the user is in the database. There will only be one user with
-            #that name so hence why we are only interested in grabbing the first entry of the db
-            found_user = Users.query.filter_by(user_name=username).first()
-
-            if found_user:
-                session["user"] = found_user.user_name
-            else:
-                #adding the user to the database
-                usr = Users(username, "")
-                db.session.add(usr)
-                db.sessioncommit()
-
-
-        else:
-            flash("You are not logged in!")
-            return render_template("index.html")
 
 @app.route("/logout")
 def logout():
 	session.pop("user", None)
 	flash("You have been logged out!")
-	return redirect("/")
+	return redirect(url_for('login_form'))
 
 
 #defining the socket functions
