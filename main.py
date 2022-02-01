@@ -1,20 +1,24 @@
-
 from flask import Flask, render_template, request, flash, session, redirect, url_for
+from datetime import timedelta
 from flask_session import Session
 from flask_socketio import SocketIO, send, emit
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-Session(app)
-socketio = SocketIO(app)
-db = SQLAlchemy(app)
 
-                #name of table we will be referencing
+socketio = SocketIO(app)
+
+            #name of table we will be referencing
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
 app.static_folder = "static"
 app.secret_key = "My_secret_key"
 app.config["SECRET KEY"] = "another_secret!"
 app.config["SESSION_TYPE"] = "filesystem"
+
+db = SQLAlchemy(app)
+Session(app)
+app.permanent_session_lifetime = timedelta(minutes=5)
+
 
 
 #creating the database model containing username
@@ -27,10 +31,6 @@ class Users(db.Model):
         self.user_name = user_name
 
 
-
-
-
-
 #creating the routes
 @app.route('/login', methods=["POST", "GET"])
 def login_form():
@@ -38,6 +38,20 @@ def login_form():
     if request.method == "POST":
         username = request.form.get("user_name")
         session["user"] = username
+
+        #checking if the user is in the database. There will only be one user with
+        #that name so hence why we are only interested in grabbing the first entry of the db
+        found_user = Users.query.filter_by(user_name=username).first()
+
+        if found_user:
+            session["user"] = found_user.user_name
+        else:
+            #adding the user to the database
+            usr = Users(username, "")
+            db.session.add(usr)
+            db.sessioncommit()
+
+        flash("You are logged in!")
         return redirect(url_for('chat_page'))
     else:
         if "user" in session:
@@ -46,7 +60,6 @@ def login_form():
             return redirect(url_for('chat_page'))
 
         return render_template('login.html')
-
 
 
 @app.route('/chat-page', methods=["POST", "GET"])
