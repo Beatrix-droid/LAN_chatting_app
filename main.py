@@ -29,7 +29,6 @@ class Users(db.Model):
 
     #id is automatically created as it is the primary key
     def __init__(self, user_name):
-
         """Initialises a new user"""
 
         self.user_name = user_name
@@ -58,7 +57,8 @@ def chat_page():
         #that name so hence why we are only interested in grabbing the first entry of the db
         found_user = Users.query.filter_by(user_name=username).first()
         if found_user:
-            session["user"] = found_user.user_name
+            flash("username already exists, please pick another one")
+            return redirect(url_for("login_form"))
 
         else:
             #push user to database:
@@ -69,13 +69,12 @@ def chat_page():
                 return render_template('chat-page.html', Uname=username)
             except:
                 return "there was an error adding the user"
+
         #request method = GET
     else:
         if "user" in session:
             flash("already logged in")
             return render_template("chat-page-html", Uname= session["user"])
-
-
 
         else:
             flash("You are not logged in!")
