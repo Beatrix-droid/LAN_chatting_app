@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 socketio = SocketIO(app)
 
-            #name of table we will be referencing
+#name of table we will be referencing
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
 app.static_folder = "static"
 app.secret_key = "My_secret_key"
@@ -21,35 +21,47 @@ app.permanent_session_lifetime = timedelta(minutes=5)
 
 
 
-#creating the database model containing username
 class Users(db.Model):
-    _id =  db.Column("id", db.Integer, primary_key=True)
+    """ Class that stores the user's usernames"""
+
+    id =  db.Column("id", db.Integer, primary_key=True)
     user_name = db.Column("username", db.String(100))
 
     #id is automatically created as it is the primary key
     def __init__(self, user_name):
+
+        """Initialises a new user"""
+
         self.user_name = user_name
+
 
 
 #creating the routes
 @app.route('/login')
 def login_form():
+    """returns the login page """
+
     return render_template('login.html')
 
 
 @app.route('/chat-page', methods=["POST", "GET"])
 def chat_page():
+    """Adds new users to the db, checks if existing users are in teh db, and redirects all
+    these usersto the chatting page"""
+
     if request.method == "POST":
         username = request.form.get("user_name")
         session["user"] = username
         new_user = Users(user_name=username)
-        #push user to database:
 
+        #checking if the user is in the database. There will only be one user with
+        #that name so hence why we are only interested in grabbing the first entry of the db
         found_user = Users.query.filter_by(user_name=username).first()
         if found_user:
             session["user"] = found_user.user_name
 
         else:
+            #push user to database:
             try:
                 db.session.add(new_user)
                 db.session.commit()
@@ -63,33 +75,39 @@ def chat_page():
             flash("already logged in")
             return render_template("chat-page-html", Uname= session["user"])
 
-             #checking if the user is in the database. There will only be one user with
-            #that name so hence why we are only interested in grabbing the first entry of the db
+
 
         else:
             flash("You are not logged in!")
             return render_template("login.html")
 
+
 @app.route("/logout")
 def logout():
+    """Logs out users from the chatpage and deletes them from the database"""
+
     if "user" in session:
-        session.pop("user", None)
+        username = session.pop("user")
+        #deleting the user from the database:
+        delete_user = Users.query.filter_by(user_name=username).delete()
+        db.session.commit()
         flash("You have been logged out!")
-    return render_template("login.html")
+    return redirect(url_for("login_form"))
+
 
 @app.route("/view")
 def view():
+    """Displays the list of users that are logged into the database"""
+
     return render_template("views.html", values=Users.query.all())
 
 
-
-#defining the socket functions
-
-# function to send messages to the entire group
 @socketio.on("message")
 def handle_message(msg):
-	print("message: " + msg)
-	send(msg, broadcast=True)
+    """Broadcasts messages to all connected users"""
+
+    print("message: " + msg)
+    send(msg, broadcast=True)
 
 
 if __name__ == "__main__":
