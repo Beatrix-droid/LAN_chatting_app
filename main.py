@@ -32,50 +32,55 @@ class Users(db.Model):
 
 
 #creating the routes
-@app.route('/login', methods=["POST", "GET"])
+@app.route('/login')
 def login_form():
-
-    if request.method == "POST":
-        username = request.form.get("user_name")
-        session["user"] = username
-
-        #checking if the user is in the database. There will only be one user with
-        #that name so hence why we are only interested in grabbing the first entry of the db
-        found_user = Users.query.filter_by(user_name=username).first()
-
-        if found_user:
-            session["user"] = found_user.user_name
-        else:
-            #adding the user to the database
-            usr = Users(username, "")
-            db.session.add(usr)
-            db.sessioncommit()
-
-        flash("You are logged in!")
-        return redirect(url_for('chat_page'))
-    else:
-        if "user" in session:
-            username = session["user"]
-            flash("already logged in")
-            return redirect(url_for('chat_page'))
-
-        return render_template('login.html')
+    return render_template('login.html')
 
 
 @app.route('/chat-page', methods=["POST", "GET"])
 def chat_page():
-       if "user" in session:
-            username = session["user"]
-            return render_template('chat-page.html', Uname=username)
-       else:
-           return redirect(url_for('login_form'))
+    if request.method == "POST":
+        username = request.form.get("user_name")
+        session["user"] = username
+        new_user = Users(user_name=username)
+        #push user to database:
 
+        found_user = Users.query.filter_by(user_name=username).first()
+        if found_user:
+            session["user"] = found_user.user_name
+
+        else:
+            try:
+                db.session.add(new_user)
+                db.session.commit()
+                flash("login successful")
+                return render_template('chat-page.html', Uname=username)
+            except:
+                return "there was an error adding the user"
+        #request method = GET
+    else:
+        if "user" in session:
+            flash("already logged in")
+            return render_template("chat-page-html", Uname= session["user"])
+
+             #checking if the user is in the database. There will only be one user with
+            #that name so hence why we are only interested in grabbing the first entry of the db
+
+        else:
+            flash("You are not logged in!")
+            return render_template("login.html")
 
 @app.route("/logout")
 def logout():
-	session.pop("user", None)
-	flash("You have been logged out!")
-	return redirect(url_for('login_form'))
+    if "user" in session:
+        session.pop("user", None)
+        flash("You have been logged out!")
+    return render_template("login.html")
+
+@app.route("/view")
+def view():
+    return render_template("views.html", values=Users.query.all())
+
 
 
 #defining the socket functions
