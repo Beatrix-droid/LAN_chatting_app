@@ -1,3 +1,4 @@
+
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from datetime import timedelta
 from flask_session import Session
@@ -26,6 +27,7 @@ class Users(db.Model):
 
     id =  db.Column("id", db.Integer, primary_key=True)
     user_name = db.Column("username", db.String(100))
+
 
     #id is automatically created as it is the primary key
     def __init__(self, user_name):
@@ -66,7 +68,7 @@ def chat_page():
                 db.session.add(new_user)
                 db.session.commit()
                 flash("login successful")
-                return render_template('chat-page.html', Uname=username)
+                return render_template('chat-page.html', Uname=new_user.user_name)
             except:
                 return "there was an error adding the user"
 
@@ -99,6 +101,16 @@ def view():
     """Displays the list of users that are logged into the database"""
 
     return render_template("views.html", values=Users.query.all())
+
+
+
+@app.route("/delete")
+def delete():
+    """A temporary route that clears the database whilst I work on fixing the session bug."""
+
+    Users.query.delete()
+    db.session.commit()
+
 
 
 @socketio.on("message")

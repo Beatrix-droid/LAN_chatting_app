@@ -14,7 +14,7 @@
       <div class="hero-container">
         <div class="hero-area">
           <div class="hero-text">
-            <h1 class="usernm">Hello {{Uname}}!</h1>
+            <h1 id="usernm" class="usernm">Hello {{Users.user_name}}!</h1>
           </div>
         </div>
       </div>
@@ -75,6 +75,8 @@
 
       $(document).ready(function() {
         var socket = io.connect("http://127.0.0.1:5000");
+        var username =
+
 
         //making sure that when the user has connected we get notified. socket.on means the socket is
         //listening for a particular event (the event is the first parameter passed in socket.on)
@@ -85,13 +87,13 @@
         });
 
 
-
-      socket.on("message", function(msg) {
-        $("#messages").append("<li>" + msg + "</li>");
+      socket.on("json", function(json) {
+        $("#messages").append("<li>"+ json + "</li>");
         });
 
        //sending a message and clearing the input box once the message has been sent
        $("#SendButton").on("click", function() {
+          socket.send($("#usernm").html()[1]);
           socket.send($("#MyMessage").val());
           $("#MyMessage").val("");
        });
