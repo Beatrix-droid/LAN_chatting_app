@@ -16,50 +16,35 @@
     <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
       <div class="d-flex justify-content-center align-items-center h-100">
         <div class="text-white">
-          <h1 class="mb-3">Welcome to the Flask-based LAN Chat App!</h1>
-            <h4 class="mb-3">Please enter a username to access this service!</h4>
+          <h1 class="mb-3">View the Logged in Users:</h1>
         </div>
       </div>
     </div>
   </div>
   <!-- Background image -->
 </header>
+<div class="message_container">
+  <div class="d-inline-flex p-2">
+    <div class="card" style="width: 30rem;">
+      <div class="card-body">
+      {% for item in items %}
+        <ul>{{item.message}}</ul>
+      {%endfor%}
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
 
 <body class="background">
 <!--horizontal container: a container to align items to the center -->
-    <div class="alignment_container">
-        <section>
-            {% with messages =  get_flashed_messages ()%}
-            {%if messages %}
-            {%for message in messages %}
-            <h4 class="flash">{{message}}</h4>
-                    {%endfor%}
-                {%endif%}
-            {%endwith%}
-        </section>
-    </div>
 
 
-    <div class="alignment_container">
-        <form action="/chat-page" class="custom-centered" method="POST">
-            <!-- styling the form -->
-            <div class="d-inline-flex p-2">
-                 <div class="input-group flex-nowrap">
-                    <span class="input-group-text" id="addon-wrapping">@</span>
-                        <input type="text" class="form-control" placeholder=" Enter a Username" name="user_name" aria-label="Username" aria-describedby="addon-wrapping" required>
-                 </div>
-            </div>
-            <!-- end of styling the form -->
-            <button type="submit" class="btn btn-primary">Login!</button>
-        </form>
-    </div>
-<!---
-<div class="bg-image-container">
- <img class="bg-image" src="https://logo.clearbit.com/socket.io" alt="socketio_logo">
-</div>
+
+
 --->
 </body>
 

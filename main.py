@@ -1,4 +1,5 @@
 
+from email.message import Message
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from datetime import timedelta
 from flask_session import Session
@@ -11,6 +12,7 @@ socketio = SocketIO(app)
 
 #name of table we will be referencing
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
+app.config["SQLALCHEMY_BINDS"] = {"messages": "sqlite:///messages.sqlite3"}
 app.static_folder = "static"
 app.secret_key = "My_secret_key"
 app.config["SECRET KEY"] = "another_secret!"
@@ -34,6 +36,25 @@ class Users(db.Model):
         """Initialises a new user"""
 
         self.user_name = user_name
+
+
+class Message_history(db.Model):
+    """ Class that stores the user's usernames"""
+
+    __bind_key__ = 'messages'
+    id =  db.Column("id", db.Integer, primary_key=True)
+    message = db.Column("messages", db.String(100))
+
+
+    #id is automatically created as it is the primary key
+    def __init__(self, message):
+        """Initialises a new message"""
+
+        self.message = message
+
+
+
+
 
 
 
@@ -68,7 +89,7 @@ def chat_page():
                 db.session.add(new_user)
                 db.session.commit()
                 flash("login successful")
-                return render_template('chat-page.html', Uname=new_user.user_name)
+                return render_template('chat-page.html', Uname=username)
             except:
                 return "there was an error adding the user"
 
@@ -103,11 +124,17 @@ def view():
     return render_template("views.html", values=Users.query.all())
 
 
+@app.route("/messages")
+def view():
+    """Displays the list of users that are logged into the database"""
+
+    return render_template("messages.html", items=Message_history.query.all())
+
+
 
 @app.route("/delete")
 def delete():
     """A temporary route that clears the database whilst I work on fixing the session bug."""
-
     Users.query.delete()
     db.session.commit()
 
@@ -116,8 +143,13 @@ def delete():
 @socketio.on("message")
 def handle_message(msg):
     """Broadcasts messages to all connected users"""
+    #data= {'msg': session.get('user') + msg}
+    new_message = Message_history(new_message=msg)
+    db.session.add(new_message)
+    db.session.commit()
 
-    print("message: " + msg)
+
+    print("message:", msg)
     send(msg, broadcast=True)
 
 
