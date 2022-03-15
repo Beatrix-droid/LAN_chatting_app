@@ -46,9 +46,16 @@
        text-align: center;
        }
 
-    .ul{
-       color: white;
+    .ul-style{
+       list-style-type: none;
        }
+
+    .list-style{
+      padding: 5px 10px;
+      margin: 5px;
+      background-color:#d1cfcf;;
+      border-radius: 8%;
+    }
 
    .background{
        background: #4EFECD;
