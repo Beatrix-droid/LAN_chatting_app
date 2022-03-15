@@ -3,19 +3,22 @@ from email.message import Message
 from flask import Flask, render_template, request, flash, session, redirect, url_for
 from datetime import timedelta
 from flask_session import Session
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, send
+import os
+from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
 socketio = SocketIO(app)
 
+load_dotenv()
 #name of table we will be referencing
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
 app.config["SQLALCHEMY_BINDS"] = {"messages": "sqlite:///messages.sqlite3"}
 app.static_folder = "static"
-app.secret_key = "My_secret_key"
-app.config["SECRET KEY"] = "another_secret!"
+app.secret_key = os.getenv("SECRET2")
+app.config["SECRET KEY"] = os.getenv("SECRET")
 app.config["SESSION_TYPE"] = "filesystem"
 
 db = SQLAlchemy(app)
@@ -51,8 +54,6 @@ class Message_history(db.Model):
         """Initialises a new message"""
 
         self.message = message
-
-
 
 
 
