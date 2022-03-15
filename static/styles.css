@@ -56,6 +56,8 @@
        background: -moz-radial-gradient(center, #4EFECD, #000000);
        background: radial-gradient(ellipse at center, #4EFECD, #000000);
 
+      }
+
    .custom-centered{
        margin:0 auto;
        width:300px;
@@ -68,3 +70,10 @@
     }
 
 
+  .scroll-div{
+    width: 430px;
+    background-color: white;
+    height: 300px;
+    overflow: hidden;
+    overflow-y: scroll;
+  }

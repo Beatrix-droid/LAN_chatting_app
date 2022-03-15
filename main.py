@@ -1,12 +1,13 @@
 
-from email.message import Message
-from flask import Flask, render_template, request, flash, session, redirect, url_for
-from datetime import timedelta
-from flask_session import Session
-from flask_socketio import SocketIO, send
 import os
 from dotenv import load_dotenv
+from flask import (Flask, flash, redirect, render_template, request, session,
+                   url_for)
+
+from flask_socketio import SocketIO, send
 from flask_sqlalchemy import SQLAlchemy
+
+from flask_session import Session
 
 app = Flask(__name__)
 
@@ -14,6 +15,7 @@ socketio = SocketIO(app)
 
 load_dotenv()
 #name of table we will be referencing
+
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
 app.config["SQLALCHEMY_BINDS"] = {"messages": "sqlite:///messages.sqlite3"}
 app.static_folder = "static"
@@ -23,7 +25,6 @@ app.config["SESSION_TYPE"] = "filesystem"
 
 db = SQLAlchemy(app)
 Session(app)
-app.permanent_session_lifetime = timedelta(minutes=5)
 
 
 
@@ -57,8 +58,6 @@ class Message_history(db.Model):
 
 
 
-
-
 #creating the routes
 @app.route('/login')
 def login_form():
@@ -89,7 +88,6 @@ def chat_page():
             try:
                 db.session.add(new_user)
                 db.session.commit()
-                flash("login successful")
                 return render_template('chat-page.html', Uname=username)
             except:
                 return "there was an error adding the user"
@@ -112,7 +110,8 @@ def logout():
     if "user" in session:
         username = session.pop("user")
         #deleting the user from the database:
-        delete_user = Users.query.filter_by(user_name=username).delete()
+        delete_user = Users.query.filter_by(user_name=username).first_or_404()
+        db.session.delete(delete_user)
         db.session.commit()
         flash("You have been logged out!")
     return redirect(url_for("login_form"))
@@ -126,7 +125,7 @@ def view():
 
 
 @app.route("/messages")
-def view():
+def view_massages():
     """Displays the list of users that are logged into the database"""
 
     return render_template("messages.html", items=Message_history.query.all())
@@ -136,6 +135,7 @@ def view():
 @app.route("/delete")
 def delete():
     """A temporary route that clears the database whilst I work on fixing the session bug."""
+
     Users.query.delete()
     db.session.commit()
 
@@ -144,14 +144,16 @@ def delete():
 @socketio.on("message")
 def handle_message(msg):
     """Broadcasts messages to all connected users"""
+
     #data= {'msg': session.get('user') + msg}
-    new_message = Message_history(new_message=msg)
+    new_message = Message_history(message=msg)
     db.session.add(new_message)
     db.session.commit()
 
 
     print("message:", msg)
     send(msg, broadcast=True)
+
 
 
 if __name__ == "__main__":

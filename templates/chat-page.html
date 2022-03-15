@@ -26,7 +26,13 @@
       <div class="d-inline-flex p-2">
         <div class="card" style="width: 30rem;">
           <div class="card-body">
+            <div class="scroll-div">
             <ul id="messages">
+                {% for msg in items %}
+                <li>{{items.message}}</li>
+              {%endfor%}
+              </ul>
+            </div>
             </ul>
           </div>
         </div>
@@ -38,11 +44,11 @@
       <div class="d-inline-flex p-2">
         <div class="input-group">
           <span class="input-group-text">What say you?</span>
-          <textarea id="MyMessage" class="form-control" aria-label="With textarea"></textarea>
+          <textarea id="MyMessage" class="form-control" required="true" aria-label="With textarea"></textarea>
         </div>
         <div class="chat_page_container">
           <div class="d-inline-flex p-2">
-            <button type="button" id="SendButton"class="btn btn-primary">Say it!</button>
+            <button type="submit" id="SendButton"class="btn btn-primary">Say it!</button>
           </div>
         </div>
         <div class="chat_page_container">
@@ -87,6 +93,7 @@
 
 
       socket.on("message", function(msg) {
+        if (msg != "")
         $("#messages").append("<li>"+ msg + "</li>");
         });
 

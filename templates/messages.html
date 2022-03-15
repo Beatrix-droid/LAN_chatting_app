@@ -27,9 +27,17 @@
   <div class="d-inline-flex p-2">
     <div class="card" style="width: 30rem;">
       <div class="card-body">
-      {% for item in items %}
-        <ul>{{item.message}}</ul>
+
+      <ul id="messges">
+        {% for msg in items %}
+        <li>{{items.message}}</li>
+
       {%endfor%}
+
+
+      </ul>
+
+
       </div>
     </div>
   </div>
