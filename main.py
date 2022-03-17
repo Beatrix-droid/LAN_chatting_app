@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from flask import (Flask, flash, redirect, render_template, request, session,
                    url_for)
 
-from flask_socketio import SocketIO, send
+from flask_socketio import SocketIO, send, emit
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_session import Session
@@ -22,7 +22,11 @@ app.static_folder = "static"
 app.secret_key = os.getenv("SECRET2")
 app.config["SECRET KEY"] = os.getenv("SECRET")
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["SESSION_COOKIE_HTTPONLY "] = False
+app.config['PERMANENT_SESSION_LIFETIME']= False
+app.config['SESSION_PROTECTION'] = 'strong'
 
+print(app.config)
 db = SQLAlchemy(app)
 Session(app)
 
@@ -56,6 +60,11 @@ class Message_history(db.Model):
 
         self.message = message
 
+
+
+@app.before_request
+def make_session_permanent():
+    session.permanent = False
 
 
 #creating the routes
@@ -131,7 +140,6 @@ def view_massages():
     return render_template("messages.html", items=Message_history.query.all())
 
 
-
 @app.route("/delete")
 def delete():
     """A temporary route that clears the database whilst I work on fixing the session bug."""
@@ -141,18 +149,35 @@ def delete():
 
 
 
-@socketio.on("message")
+@socketio.on("event")
+def connect(sid, session):
+    username = session["user"]
+
+    socketio.save_session(sid, {'username': username})
+
+
+@socketio.on("event")
+def disconnect(sid):
+    if "user" in session:
+        username = session.pop("user")
+        #deleting the user from the database:
+        delete_user = Users.query.filter_by(user_name=username).first_or_404()
+        db.session.delete(delete_user)
+        db.session.commit()
+        send(f'{username }disconnected ', broadcast=True)
+
+
+@socketio.on("join")
 def handle_message(msg):
-    """Broadcasts messages to all connected users"""
-
-    #data= {'msg': session.get('user') + msg}
-    new_message = Message_history(message=msg)
-    db.session.add(new_message)
-    db.session.commit()
+    username = session.get('user')
+    emit('status', {'msg':  username + ' has entered the chat.'})
 
 
-    print("message:", msg)
-    send(msg, broadcast=True)
+@socketio.on('text')
+def text(message):
+    username = session.get('user')
+    emit('message', {'msg': username + ' : ' + message['msg']}, broadcast= True)
+
 
 
 

@@ -53,7 +53,7 @@
     .list-style{
       padding: 5px 10px;
       margin: 5px;
-      background-color:#d1cfcf;;
+      background-color:#d1cfcf;
       border-radius: 8%;
     }
 
@@ -77,10 +77,10 @@
     }
 
 
-  .scroll-div{
-    width: 430px;
-    background-color: white;
-    height: 300px;
-    overflow: hidden;
-    overflow-y: scroll;
-  }
+    .scroll-div{
+      width: 430px;
+      background-color: white;
+      height: 300px;
+      overflow: hidden;
+      overflow-y: scroll;
+    }

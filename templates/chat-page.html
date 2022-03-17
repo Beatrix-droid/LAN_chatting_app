@@ -88,20 +88,32 @@
         //listening for a particular event (the event is the first parameter passed in socket.on)
         // once the socket knows a user has connected, it triggers a callback function that sends a message that the user has connected (socket.send)
 
+
+
       socket.on("connect", function(){
         socket.send("User has connected");
         });
 
 
-      socket.on("message", function(msg) {
-        if (msg != "")
-        $("#messages").append("<li class='list-style'>"+ msg + "</li>");
+      socket.on("disconnect", function(){
+        socket.send("User has disconnected");
+      });
+
+
+      socket.on("message", function(data) {
+        if (data != "")
+        $("#messages").append("<li class='list-style'>"+ data.msg + "</li>");
         });
 
        //sending a message and clearing the input box once the message has been sent
-       $("#SendButton").on("click", function() {
-          socket.send($("#MyMessage").val());
+       $("#SendButton").on("click", function(e) {
+          text =($("#MyMessage").val());
           $("#MyMessage").val("");
+          socket.emit("text", {msg: text})
        });
+
      });
   </script>
+
+
+<!---backgroundColor: '#838080',!>
