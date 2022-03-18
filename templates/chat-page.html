@@ -1,4 +1,3 @@
-
 <html>
   <head>
       <meta charset="utf-8">
@@ -90,17 +89,7 @@
 
 
 
-      socket.on("connect", function(){
-        socket.send("User has connected");
-        });
-
-
-      socket.on("disconnect", function(){
-        socket.send("User has disconnected");
-      });
-
-
-      socket.on("message", function(data) {
+      socket.on("text", function(data) {
         if (data != "")
         $("#messages").append("<li class='list-style'>"+ data.msg + "</li>");
         });
@@ -114,6 +103,3 @@
 
      });
   </script>
-
-
-<!---backgroundColor: '#838080',!>

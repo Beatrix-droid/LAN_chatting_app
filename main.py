@@ -1,4 +1,3 @@
-
 import os
 from dotenv import load_dotenv
 from flask import (Flask, flash, redirect, render_template, request, session,
@@ -149,28 +148,10 @@ def delete():
 
 
 
-@socketio.on("event")
-def connect(sid, session):
-    username = session["user"]
-
-    socketio.save_session(sid, {'username': username})
-
-
-@socketio.on("event")
-def disconnect(sid):
-    if "user" in session:
-        username = session.pop("user")
-        #deleting the user from the database:
-        delete_user = Users.query.filter_by(user_name=username).first_or_404()
-        db.session.delete(delete_user)
-        db.session.commit()
-        send(f'{username }disconnected ', broadcast=True)
-
-
-@socketio.on("join")
-def handle_message(msg):
+@socketio.on("connect")
+def handle_message():
     username = session.get('user')
-    emit('status', {'msg':  username + ' has entered the chat.'})
+    emit('connect', {'name':  username + ' has entered the chat.'})
 
 
 @socketio.on('text')
