@@ -103,7 +103,7 @@ def chat_page():
     else:
         if "user" in session:
             flash("already logged in")
-            return render_template("chat-page-html", Uname= session["user"])
+            return render_template("chat-page.html", Uname= session["user"])
 
         else:
             flash("You are not logged in!")
