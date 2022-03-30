@@ -83,13 +83,27 @@
         var socket = io.connect("http://127.0.0.1:5000");
 
 
-        //making sure that when the user has connected we get notified. socket.on means the socket is
-        //listening for a particular event (the event is the first parameter passed in socket.on)
-        // once the socket knows a user has connected, it triggers a callback function that sends a message that the user has connected (socket.send)
+      //making sure that when the user has connected we get notified. socket.on means the socket is
+      //listening for a particular event (the event is the first parameter passed in socket.on)
+      // once the socket knows a user has connected, it triggers a callback function that sends a message that the user has connected (socket.send)
 
 
 
-      socket.on("text", function(data) {
+      socket.on("connect", function(){
+        socket.send("User has connected");
+        });
+
+      //jquery detecting a user closing a window
+      $(window).on('beforeunload', function(){
+          return 'Are you sure you want to leave?';
+      });
+
+      socket.on("disconnect", function(){
+        socket.send("User has disconnected");
+      });
+
+
+      socket.on("message", function(data) {
         if (data != "")
         $("#messages").append("<li class='list-style'>"+ data.msg + "</li>");
         });
@@ -100,6 +114,7 @@
           $("#MyMessage").val("");
           socket.emit("text", {msg: text})
        });
+
 
      });
   </script>

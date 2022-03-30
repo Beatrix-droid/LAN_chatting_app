@@ -3,12 +3,20 @@ from dotenv import load_dotenv
 from flask import (Flask, flash, redirect, render_template, request, session,
                    url_for)
 
+
 from flask_socketio import SocketIO, send, emit
 from flask_sqlalchemy import SQLAlchemy
+
+
+from flask_login import UserMixin
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import InputRequired, Length, ValidationError
 
 from flask_session import Session
 
 app = Flask(__name__)
+db = SQLAlchemy(app)
 
 socketio = SocketIO(app)
 
@@ -21,17 +29,16 @@ app.static_folder = "static"
 app.secret_key = os.getenv("SECRET2")
 app.config["SECRET KEY"] = os.getenv("SECRET")
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_COOKIE_HTTPONLY "] = False
-app.config['PERMANENT_SESSION_LIFETIME']= False
-app.config['SESSION_PROTECTION'] = 'strong'
 
-print(app.config)
+
+#print(app.config)
 db = SQLAlchemy(app)
 Session(app)
 
 
 
-class Users(db.Model):
+
+class Users(db.Model, UserMixin):
     """ Class that stores the user's usernames"""
 
     id =  db.Column("id", db.Integer, primary_key=True)
@@ -43,6 +50,21 @@ class Users(db.Model):
         """Initialises a new user"""
 
         self.user_name = user_name
+
+
+
+class Login_form(FlaskForm):
+
+    """Class that handles the Login Form"""
+
+    user_name = StringField([InputRequired(), Length(min=4, max = 20)])
+    SubmitField=("Register")
+
+    def validate_username(self, user_name):
+
+        existing_user_name = Users.query.filter_by(user_name=session["user"])
+        if existing_user_name:
+            raise ValidationError("username already exists, please pick another one")
 
 
 class Message_history(db.Model):
@@ -61,17 +83,16 @@ class Message_history(db.Model):
 
 
 
-@app.before_request
-def make_session_permanent():
-    session.permanent = False
+
 
 
 #creating the routes
 @app.route('/login')
 def login_form():
     """returns the login page """
+    form = Login_form()
 
-    return render_template('login.html')
+    return render_template('login.html', form = form)
 
 
 @app.route('/chat-page', methods=["POST", "GET"])
@@ -79,20 +100,21 @@ def chat_page():
     """Adds new users to the db, checks if existing users are in teh db, and redirects all
     these usersto the chatting page"""
 
+    form = Login_form()
+
     if request.method == "POST":
-        username = request.form.get("user_name")
-        session["user"] = username
-        new_user = Users(user_name=username)
+        if form.validate_on_submit():
+            username = form.data.user_name
 
-        #checking if the user is in the database. There will only be one user with
-        #that name so hence why we are only interested in grabbing the first entry of the db
-        found_user = Users.query.filter_by(user_name=username).first()
-        if found_user:
-            flash("username already exists, please pick another one")
-            return redirect(url_for("login_form"))
+            session.permanent = False
+            session["user"] = username
+            new_user = Users(user_name=username)
 
-        else:
-            #push user to database:
+            #checking if the user is in the database. There will only be one user with
+            #that name so hence why we are only interested in grabbing the first entry of the db
+
+
+                #push user to database:
             try:
                 db.session.add(new_user)
                 db.session.commit()
@@ -125,6 +147,8 @@ def logout():
     return redirect(url_for("login_form"))
 
 
+
+
 @app.route("/view")
 def view():
     """Displays the list of users that are logged into the database"""
@@ -148,10 +172,24 @@ def delete():
 
 
 
-@socketio.on("connect")
-def handle_message():
+@socketio.on('disconnect')
+def disconnect_user():
+    """Removes users from db and automatically logs them out if they close the tab"""
+
+
+
+
+@socketio.on("event")
+def connect(sid, session):
+    username = session["user"]
+
+    socketio.save_session(sid, {'username': username})
+
+
+@socketio.on("join")
+def handle_message(msg):
     username = session.get('user')
-    emit('connect', {'name':  username + ' has entered the chat.'})
+    emit('status', {'msg':  username + ' has entered the chat.'})
 
 
 @socketio.on('text')
