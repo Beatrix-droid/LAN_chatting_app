@@ -22,11 +22,9 @@ app.static_folder = "static"
 app.secret_key = os.getenv("SECRET2")
 app.config["SECRET KEY"] = os.getenv("SECRET")
 app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_COOKIE_HTTPONLY "] = False
-app.config['PERMANENT_SESSION_LIFETIME']= False
-app.config['SESSION_PROTECTION'] = 'strong'
 
-print(app.config)
+
+#print(app.config)
 db = SQLAlchemy(app)
 Session(app)
 
@@ -62,10 +60,6 @@ class Message_history(db.Model):
 
 
 
-@app.before_request
-def make_session_permanent():
-    session.permanent = False
-
 
 #creating the routes
 @app.route('/login')
@@ -82,6 +76,7 @@ def chat_page():
 
     if request.method == "POST":
         username = request.form.get("user_name")
+
         session["user"] = username
         new_user = Users(user_name=username)
 
