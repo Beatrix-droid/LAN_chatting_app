@@ -1,11 +1,11 @@
 
 
 from config import *
+from models import db, Users, Message_history
 from flask import (Flask, flash, redirect, render_template, request, session,
                    url_for)
 
 from flask_socketio import SocketIO, send, emit
-from flask_sqlalchemy import SQLAlchemy
 
 from flask_session import Session
 
@@ -13,54 +13,17 @@ from flask_session import Session
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-#loading the config file
+app.static_folder = "static"
+Session(app)
 
+
+#loading the config file
+#with this can leave code alone and control the config environment outside of the application
+#using the terminal
 if app.config["ENV"] == "production":
     app.config.from_object("config.ProductionConfig")
 else:
     app.config.from_object("config.DevelopmentConfig")
-#with this can leave code alone and control the config environment outside of the application
-#using the terminal
-
-
-app.static_folder = "static"
-
-
-
-#print(app.config)
-db = SQLAlchemy(app)
-Session(app)
-
-
-
-class Users(db.Model):
-    """ Class that stores the user's usernames"""
-
-    id =  db.Column("id", db.Integer, primary_key=True)
-    user_name = db.Column("username", db.String(100))
-
-
-    #id is automatically created as it is the primary key
-    def __init__(self, user_name):
-        """Initialises a new user"""
-
-        self.user_name = user_name
-
-
-class Message_history(db.Model):
-    """ Class that stores the user's usernames"""
-
-    __bind_key__ = 'messages'
-    id =  db.Column("id", db.Integer, primary_key=True)
-    message = db.Column("messages", db.String(100))
-
-
-    #id is automatically created as it is the primary key
-    def __init__(self, message):
-        """Initialises a new message"""
-
-        self.message = message
-
 
 
 
@@ -70,6 +33,7 @@ def login_form():
     """returns the login page """
 
     return render_template('login.html')
+
 
 
 @app.route('/chat-page', methods=["POST", "GET"])
@@ -110,6 +74,7 @@ def chat_page():
             return render_template("login.html")
 
 
+
 @app.route("/logout")
 def logout():
     """Logs out users from the chatpage and deletes them from the database"""
@@ -124,6 +89,7 @@ def logout():
     return redirect(url_for("login_form"))
 
 
+
 @app.route("/view")
 def view():
     """Displays the list of users that are logged into the database"""
@@ -131,11 +97,13 @@ def view():
     return render_template("views.html", values=Users.query.all())
 
 
+
 @app.route("/messages")
 def view_massages():
     """Displays the list of users that are logged into the database"""
 
     return render_template("messages.html", items=Message_history.query.all())
+
 
 
 @app.route("/delete")
@@ -154,6 +122,7 @@ def connect(sid, session):
     socketio.save_session(sid, {'username': username})
 
 
+
 @socketio.on("event")
 def disconnect(sid):
     if "user" in session:
@@ -165,16 +134,19 @@ def disconnect(sid):
         send(f'{username }disconnected ', broadcast=True)
 
 
+
 @socketio.on("join")
 def handle_message(msg):
     username = session.get('user')
     emit('status', {'msg':  username + ' has entered the chat.'})
 
 
+
 @socketio.on('text')
 def text(message):
     username = session.get('user')
     emit('message', {'msg': username + ' : ' + message['msg']}, broadcast= True)
+
 
 
 
