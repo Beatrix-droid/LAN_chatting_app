@@ -13,7 +13,7 @@ class Config(object):
 
     SQLALCHEMY_BINDS = {"messages": "sqlite:///messages.sqlite3"}
     SQLALCHEMY_DATABASE_URI = "sqlite:///users.sqlite3"
-
+    SQLALCHEMY_TRACK_MODIFICATIONS= False
 
 class ProductionConfig(Config):
     pass
