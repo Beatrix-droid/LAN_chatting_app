@@ -1,6 +1,6 @@
 
-import os
-from dotenv import load_dotenv
+
+from config import *
 from flask import (Flask, flash, redirect, render_template, request, session,
                    url_for)
 
@@ -9,19 +9,22 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask_session import Session
 
-app = Flask(__name__)
 
+app = Flask(__name__)
 socketio = SocketIO(app)
 
-load_dotenv()
-#name of table we will be referencing
+#loading the config file
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///users.sqlite3"
-app.config["SQLALCHEMY_BINDS"] = {"messages": "sqlite:///messages.sqlite3"}
+if app.config["ENV"] == "production":
+    app.config.from_object("config.ProductionConfig")
+else:
+    app.config.from_object("config.DevelopmentConfig")
+#with this can leave code alone and control the config environment outside of the application
+#using the terminal
+
+
 app.static_folder = "static"
-app.secret_key = os.getenv("SECRET2")
-app.config["SECRET KEY"] = os.getenv("SECRET")
-app.config["SESSION_TYPE"] = "filesystem"
+
 
 
 #print(app.config)
