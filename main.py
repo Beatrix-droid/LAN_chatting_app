@@ -99,10 +99,10 @@ def view():
 
 
 @app.route("/messages")
-def view_massages():
-    """Displays the list of users that are logged into the database"""
+def messages():
+    """Displays the list of messages that are logged into the database"""
 
-    return render_template("messages.html", items=Message_history.query.all())
+    return render_template("messages.html", values=Message_history.query.all())
 
 
 
@@ -146,7 +146,10 @@ def handle_message(msg):
 def text(message):
     username = session.get('user')
     emit('message', {'msg': username + ' : ' + message['msg']}, broadcast= True)
-
+    messages = message["msg"]
+    new_message = Message_history(message=messages)
+    db.session.add(new_message)
+    db.commit()
 
 
 

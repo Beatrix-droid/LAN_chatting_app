@@ -78,7 +78,11 @@
     <!-- script where the code handling the messages will be stored -->
     <script type="text/javascript">
       // instantiate a socket object and connect it to the server (in this case the local host)
+      window.onbeforeunload = function() {
+        var session_end_message = "Are you sure you Wnat to close this tab? You will be logged out";
+        return session_end_message;
 
+      }
 
       $(document).ready(function() {
         var socket = io.connect("http://127.0.0.1:5000");
