@@ -1,4 +1,3 @@
-
 <html>
   <head>
       <meta charset="utf-8">
@@ -54,7 +53,7 @@
         </div>
         <div class="chat_page_container">
           <a href="/logout">
-            <button type="button" class="btn btn-warning">Logout!</button>
+            <button id="LeaveButton" type="button" class="btn btn-warning">Logout!</button>
           </a>
         </div>
       </div>
@@ -78,35 +77,39 @@
     <!-- script where the code handling the messages will be stored -->
     <script type="text/javascript">
       // instantiate a socket object and connect it to the server (in this case the local host)
-      window.onbeforeunload = function() {
-        var session_end_message = "Are you sure you Wnat to close this tab? You will be logged out";
-        return session_end_message;
 
-      }
 
       $(document).ready(function() {
         var socket = io.connect("http://127.0.0.1:5000");
 
 
-        //making sure that when the user has connected we get notified. socket.on means the socket is
-        //listening for a particular event (the event is the first parameter passed in socket.on)
-        // once the socket knows a user has connected, it triggers a callback function that sends a message that the user has connected (socket.send)
+      //making sure that when the user has connected we get notified. socket.on means the socket is
+      //listening for a particular event (the event is the first parameter passed in socket.on)
+      // once the socket knows a user has connected, it triggers a callback function that sends a message that the user has connected (socket.send)
 
 
 
       socket.on("connect", function(){
-        socket.send("User has connected");
+        socket.emit("User has connected");
         });
 
-
-      socket.on("disconnect", function(){
-        socket.send("User has disconnected");
+      //jquery detecting a user closing a window
+      $(window).on('beforeunload', function(){
+          return 'Are you sure you want to leave?';
       });
+
+
+
+      socket.on("connected", function(connect) {
+        $("#messages").append("<li class='list-style'> <ul style='font-size:2vh;' '>" + connect.time_stamp + "</ul> <ul>" +
+           connect.msg +  "</ul> </li>"
+        });
 
 
       socket.on("message", function(data) {
         if (data != "")
-        $("#messages").append("<li class='list-style'>"+ data.msg + "</li>");
+        $("#messages").append("<li class='list-style'> <ul style='font-size:2vh;' '>" + data.time_stamp + "</ul> <ul>" +
+           data.msg +  "</ul> </li>");
         });
 
        //sending a message and clearing the input box once the message has been sent
@@ -116,8 +119,6 @@
           socket.emit("text", {msg: text})
        });
 
+
      });
   </script>
-
-
-<!---backgroundColor: '#838080',!>

@@ -57,6 +57,12 @@
       border-radius: 8%;
     }
 
+    ul.small-text{
+      font-size: 130px;
+
+
+    }
+
    .background{
        background: #4EFECD;
        background: -webkit-radial-gradient(center, #4EFECD, #000000);
