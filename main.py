@@ -46,25 +46,11 @@ class Users(db.Model):
         self.user_name = user_name
 
 
-class Message_history(db.Model):
-    """ Class that stores the user's usernames"""
-
-    __bind_key__ = 'messages'
-    id =  db.Column("id", db.Integer, primary_key=True)
-    message = db.Column("messages", db.String(100))
-
-
-    #id is automatically created as it is the primary key
-    def __init__(self, message):
-        """Initialises a new message"""
-
-        self.message = message
-
 
 
 
 #creating the routes
-@app.route('/login')
+@app.route('/')
 def login_form():
     """returns the login page """
 
@@ -138,8 +124,9 @@ def delete():
 
     Users.query.delete()
     db.session.commit()
-    
-    
+    return render_template("delete_db.html")
+
+
 @socketio.on('text')
 def text(message):
     username = session.get('user')
