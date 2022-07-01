@@ -138,8 +138,8 @@ def delete():
 
     Users.query.delete()
     db.session.commit()
-
-
+    
+    
 @socketio.on('text')
 def text(message):
     username = session.get('user')

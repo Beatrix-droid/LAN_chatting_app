@@ -100,15 +100,9 @@
 
 
 
-      socket.on("connected", function(connect) {
-        $("#messages").append("<li class='list-style'> <ul style='font-size:2vh;' '>" + connect.time_stamp + "</ul> <ul>" +
-           connect.msg +  "</ul> </li>"
-        });
-
-
       socket.on("message", function(data) {
         if (data != "")
-        $("#messages").append("<li class='list-style'> <ul style='font-size:2vh;' '>" + data.time_stamp + "</ul> <ul>" +
+        $("#messages").append("<li class='list-style my-message-box'> <ul style='font-size:2vh;' '>" + data.time_stamp + "</ul> <ul>" +
            data.msg +  "</ul> </li>");
         });
 
