@@ -3,7 +3,7 @@ from time import localtime, strftime
 from flask import (Flask, flash, redirect, render_template, request, session,
                    url_for)
 
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, emit
 from flask_sqlalchemy import SQLAlchemy
 
 from flask_session import Session
@@ -44,7 +44,6 @@ class Users(db.Model):
         """Initialises a new user"""
 
         self.user_name = user_name
-
 
 
 

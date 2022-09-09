@@ -19,6 +19,12 @@
        justify-content: center;
        }
 
+
+       #login_button{
+        margin: auto;
+        padding-top: 2em;
+        width: 50%
+       }
     .alignment_container {
        /* Center child horizontally*/
        display: flex;
@@ -39,6 +45,21 @@
        display: flex;
        justify-content: center;
        }
+
+    #form{
+      margin: auto;
+      position: absolute;
+    }
+
+    .my-message-box{
+      text-align: right;
+      background: rbg(0, 127, 255);
+      color: white;
+    }
+
+    .items_message{
+      color: rgb(255, 0, 0)
+    }
 
     .flash{
        color: white;
@@ -68,8 +89,8 @@
       }
 
    .custom-centered{
-       margin:0 auto;
-       width:300px;
+       margin:0 0 0 0auto;
+       width:50%;
        }
 
 
